@@ -21,7 +21,7 @@ public class ConsoleWritter : MonoBehaviour
     {
         if (_timer.IsLose == false && _chickenCollector.IsCollected == false)
         {
-            Debug.Log(_chickensCollectedString + _chickenCollector.WriteCollectedChickens() + _chickensCollectedEndString + _chickenCollector.WriteCurrentChickensListCount() + "\n"
+            Debug.Log(_chickensCollectedString + _chickenCollector.WriteCollectedChickens() + _chickensCollectedEndString + _chickenCollector.GetCurrentChickensCount() + "\n"
             + _timerTitleString + _timer.WriteCurrentTimerValue() + _timerTitleEndString);
         }
 

@@ -1,15 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MovementDetector : MonoBehaviour
 {
+    public bool IsRun { get; private set; } = false;
+
     [SerializeField] private Transform _ball;
 
     private Vector3 _startBallPosition;
 
     private bool _isMoving = false;
-    public bool IsRun { get; private set; } = false;
 
     private void Awake()
     {

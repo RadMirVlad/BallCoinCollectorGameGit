@@ -1,55 +1,59 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Jump : MonoBehaviour
+public class BallJumper : MonoBehaviour
 {
-    private Move _move;
+    public bool IsGrounded { get; private set; }
+    public bool IsOnWall { get; private set; }
+    public bool IsJumping { get; private set; }
 
     [SerializeField] private float _jumpForce;
 
     private Rigidbody _rigidbody;
 
-    private bool _isJumping;
-
-    public bool IsGrounded { get; private set; }
-
     private string _tagFloorString = "Floor";
+    private string _tagWallString = "Wall";
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
-        _move = GetComponent<Move>();
     }
 
     private void Update()
     {
-        if (_move.IsOnWall == false)
+        if (IsOnWall == false)
         {
             if (IsGrounded == true)
             {
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    IsGrounded = false;
-                    _isJumping = true;
+                    Jump();
                 }
             }
         }
-        else if (_move.IsOnWall)
+        else if (IsOnWall)
         {
-            IsGrounded = true;
-            _isJumping = false;
+            OnGround();
         }
+    }
+    private void Jump()
+    {
+        IsGrounded = false;
+        IsJumping = true;
+    }
+    private void OnGround()
+    {
+        IsGrounded = true;
+        IsJumping = false;
     }
 
     private void FixedUpdate()
     {
-        if (_isJumping)
+        if (IsJumping)
         {
             _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
 
             IsGrounded = false;
-            _isJumping = false;
+            IsJumping = false;
         }
     }
 
@@ -58,16 +62,21 @@ public class Jump : MonoBehaviour
         if (collision.gameObject.CompareTag(_tagFloorString))
         {
             IsGrounded = true;
+            IsOnWall = false;
+        }
+        if (collision.gameObject.CompareTag(_tagWallString))
+        {
+            IsOnWall = true;
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (_move.IsOnWall)
+        if (IsOnWall)
         {
             if (IsGrounded)
             {
-                _isJumping = false;
+                IsJumping = false;
             }
         }
     }
