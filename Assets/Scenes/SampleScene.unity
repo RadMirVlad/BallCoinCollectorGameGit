@@ -1590,7 +1590,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb4dd33340df2694aa7790a7c4c19678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameManager: {fileID: 0}
 --- !u!1 &217200958
 GameObject:
   m_ObjectHideFlags: 0
@@ -2117,7 +2116,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timer: {fileID: 657020552}
   _gameManager: {fileID: 1691160013}
-  _chickenCollector: {fileID: 212298792}
 --- !u!4 &249464037
 Transform:
   m_ObjectHideFlags: 0
