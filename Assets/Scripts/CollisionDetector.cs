@@ -3,35 +3,49 @@ using UnityEngine;
 public class CollisionDetector : MonoBehaviour
 {
     public bool IsOnWall { get; private set; }
-    //public bool IsGrounded { get; private set; }
-    //public bool IsJumping { get; private set; }
+    public bool IsGrounded { get; private set; }
 
-    [SerializeField] private BallJumper _ballJumper;
-
-    private string _tagWallString = "Wall";
-    private string _tagFloorString = "Floor";
+    [SerializeField] private GameManager _gameManager;
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag(_tagWallString))
-        {
-            IsOnWall = true;
-        }
-        if (collision.gameObject.CompareTag(_tagFloorString))
-        {
-            IsOnWall = false;
-            //IsGrounded = true;
-        }
+        if (collision.gameObject.GetComponent<Wall>())
+            RollingOnWall();
+        if (collision.gameObject.GetComponent<Ground>())
+            RollingOnGround();
     }
 
-    //private void OnCollisionExit(Collision collision)
-    //{
-    //    if (IsOnWall)
-    //    {
-    //        if (_ballJumper.IsGrounded)
-    //        {
-    //            IsJumping = false;
-    //        }
-    //    }
-    //}
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<Wall>())
+            RollingOnWall();
+        if (collision.gameObject.GetComponent<Ground>())
+            RollingOnGround();
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<Wall>())
+            Falling();
+        if (collision.gameObject.GetComponent<Ground>())
+            Falling();
+    }
+
+    private void RollingOnGround()
+    {
+        IsOnWall = false;
+        IsGrounded = true;
+    }
+
+    private void RollingOnWall()
+    {
+        IsOnWall = true;
+        IsGrounded = false;
+    }
+
+    private void Falling()
+    {
+        IsOnWall = false;
+        IsGrounded = false;
+    }
 }

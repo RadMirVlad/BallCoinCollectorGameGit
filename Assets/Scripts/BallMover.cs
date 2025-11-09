@@ -6,17 +6,21 @@ public class BallMover : MonoBehaviour
 {
     public float VerticalInput { get; private set; }
     public float HorizontalInput { get; private set; }
+    public bool IsRolling { get; private set; } = false;
 
-    [SerializeField] private float _rollSpeed;
-    [SerializeField] private GameManager _gameManager;
+    [SerializeField] GameManager _gameManager;
 
     private Rigidbody _rigidbody;
+
+    [SerializeField] private float _rollSpeed;
 
     private string _horizontalInputString = "Horizontal";
     private string _verticalInputString = "Vertical";
 
     private bool _isMovingForward;
     private bool _isMovingAside;
+
+    private bool _isAllowToRoll;
 
     private void Awake()
     {
@@ -25,57 +29,63 @@ public class BallMover : MonoBehaviour
 
     private void Update()
     {
+        _isAllowToRoll = _gameManager.IsAllowToRoll;
+
         float verticalInput = Input.GetAxisRaw(_verticalInputString);
         float horizontalInput = Input.GetAxisRaw(_horizontalInputString);
 
-        if (verticalInput != 0)
+        if (_isAllowToRoll)
         {
-            VerticalInput = verticalInput;
+            if (verticalInput != 0)
+            {
+                VerticalInput = verticalInput;
 
-            HorizontalInput = 0;
+                HorizontalInput = 0;
 
-            _isMovingForward = true;
-            _isMovingAside = false;
+                _isMovingForward = true;
+                _isMovingAside = false;
+
+                IsRolling = true;
+            }
+
+            if (horizontalInput != 0)
+            {
+                HorizontalInput = horizontalInput;
+
+                VerticalInput = 0;
+
+                _isMovingForward = false;
+                _isMovingAside = true;
+
+                IsRolling = true;
+            }
+
+            if (verticalInput == 0 && horizontalInput == 0)
+            {
+                _isMovingForward = false;
+                _isMovingAside = false;
+
+                VerticalInput = 0;
+                HorizontalInput = 0;
+
+                IsRolling = false;
+            }
         }
-
-        if (horizontalInput != 0)
-        {
-            HorizontalInput = horizontalInput;
-
-            VerticalInput = 0;
-
-            _isMovingForward = false;
-            _isMovingAside = true;
-        }
-
-        if (verticalInput == 0 && horizontalInput == 0)
-        {
-            _isMovingForward = false;
-            _isMovingAside = false;
-
-            VerticalInput = 0;
-            HorizontalInput = 0;
-        }
-    }
-
-    public void Movement()
-    {
-        if (_isMovingForward)
-        {
-            _rigidbody.AddTorque(VerticalInput * _rollSpeed, 0, 0, ForceMode.VelocityChange);
-        }
-
-        if (_isMovingAside)
-        {
-            _rigidbody.AddTorque(0, 0, -HorizontalInput * _rollSpeed, ForceMode.VelocityChange);
-        }
+        IsRolling = false;
     }
 
     private void FixedUpdate()
     {
-        if (_gameManager.IsRunning)
-        {
+        if (_isAllowToRoll)
             Movement();
-        }
+    }
+
+    private void Movement()
+    {
+        if (_isMovingForward)
+            _rigidbody.AddTorque(VerticalInput * _rollSpeed, 0, 0, ForceMode.VelocityChange);
+
+        if (_isMovingAside)
+            _rigidbody.AddTorque(0, 0, -HorizontalInput * _rollSpeed, ForceMode.VelocityChange);
     }
 }

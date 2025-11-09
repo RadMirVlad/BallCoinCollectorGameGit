@@ -5,7 +5,8 @@ using UnityEngine;
 public class ConsoleWritter : MonoBehaviour
 {
     [SerializeField] private Timer _timer;
-    [SerializeField] private ChickenCollector _chickenCollector;
+    [SerializeField] private GameManager _gameManager;
+    //[SerializeField] private ChickenCollector _chickenCollector;
 
     private string _timerTitleString = "Осталось времени на сбор грудок: ";
     private string _timerTitleEndString = " секунд.";
@@ -19,10 +20,10 @@ public class ConsoleWritter : MonoBehaviour
 
     private void Update()
     {
-        if (_timer.IsLose == false && _chickenCollector.IsCollected == false)
+        if (_timer.IsLose == false && _gameManager.IsWin == false)
         {
-            Debug.Log(_chickensCollectedString + _chickenCollector.WriteCollectedChickens() + _chickensCollectedEndString + _chickenCollector.GetCurrentChickensCount() + "\n"
-            + _timerTitleString + _timer.WriteCurrentTimerValue() + _timerTitleEndString);
+            Debug.Log(_chickensCollectedString + _gameManager.GetCollectedChickens() + _chickensCollectedEndString + _gameManager.ChickensList.Count + "\n"
+            + _timerTitleString + _timer.GetCurrentTimerValue() + _timerTitleEndString);
         }
 
         if (_timer.IsLose)
@@ -30,7 +31,7 @@ public class ConsoleWritter : MonoBehaviour
             Debug.Log(_loseMessage);
         }
 
-        if (_chickenCollector.IsCollected)
+        if (_gameManager.IsWin)
         {
             Debug.Log(_winMessage);
         }

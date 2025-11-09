@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class MovementDetector : MonoBehaviour
 {
-    public bool IsRun { get; private set; } = false;
+    public bool IsStartTimer { get; private set; } = false;
 
     [SerializeField] private Transform _ball;
 
     private Vector3 _startBallPosition;
 
-    private bool _isMoving = false;
+    private bool _isMoved = false;
 
     private void Awake()
     {
@@ -17,13 +17,13 @@ public class MovementDetector : MonoBehaviour
 
     private void Update()
     {
-        if (_isMoving == false)
+        if (_isMoved == false)
         {
             if (_ball.position != _startBallPosition)
             {
-                IsRun = true;
+                IsStartTimer = true;
 
-                _isMoving = true;
+                _isMoved = true;
 
                 Debug.Log("ќтсчЄт пошЄл.");
             }
