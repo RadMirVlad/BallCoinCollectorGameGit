@@ -3,13 +3,11 @@ using UnityEngine;
 public class BallJumper : MonoBehaviour
 {
     [SerializeField] private float _jumpForce;
-    [SerializeField] private GameManager _gameManager;
+    [SerializeField] private CollisionDetector _collisionDetector;
 
     private Rigidbody _rigidbody;
     public bool IsJumping { get; private set; } = false;
-    public bool IsJumped { get; private set; } = false;
-
-    private bool _isAllowToJump;
+    public bool IsAllowToJump { get; private set; } = false;
 
     private void Awake()
     {
@@ -18,14 +16,9 @@ public class BallJumper : MonoBehaviour
 
     private void Update()
     {
-        _isAllowToJump = _gameManager.IsAllowToJump;
-        
-        if (_isAllowToJump)
+        if (IsAllowToJump)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                IsJumping = true;
-            }
+            Jump();
         }
     }
 
@@ -35,6 +28,22 @@ public class BallJumper : MonoBehaviour
         {
             _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
             IsJumping = false;
+        }
+    }
+
+    public void DisableJumping()
+    {
+        IsAllowToJump = false;
+    }
+    public void AllowJumping()
+    {
+        IsAllowToJump = true;
+    }
+    private void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            IsJumping = true;
         }
     }
 }

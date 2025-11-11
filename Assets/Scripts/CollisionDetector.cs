@@ -2,10 +2,9 @@ using UnityEngine;
 
 public class CollisionDetector : MonoBehaviour
 {
+    [SerializeField] private BallJumper _ballJumper;
     public bool IsOnWall { get; private set; }
     public bool IsGrounded { get; private set; }
-
-    [SerializeField] private GameManager _gameManager;
 
     private void OnCollisionEnter(Collision collision)
     {

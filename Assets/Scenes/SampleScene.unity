@@ -1550,7 +1550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _jumpForce: 8
-  _gameManager: {fileID: 1691160013}
+  _collisionDetector: {fileID: 212298791}
 --- !u!114 &212298790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1563,7 +1563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92f208d29b8a4224aaefcfc654848f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameManager: {fileID: 1691160013}
+  _collisionDetector: {fileID: 212298791}
   _rollSpeed: 1
 --- !u!114 &212298791
 MonoBehaviour:
@@ -1577,7 +1577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53a3487622a14eb409184dbf17c40717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameManager: {fileID: 1691160013}
+  _ballJumper: {fileID: 212298788}
 --- !u!114 &212298792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12565,10 +12565,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ballMover: {fileID: 212298790}
   _ballJumper: {fileID: 212298788}
-  _movementDetector: {fileID: 1202100015}
   _collisionDetector: {fileID: 212298791}
-  _timer: {fileID: 657020552}
   _chickenCollector: {fileID: 212298792}
+  _movementDetector: {fileID: 1202100015}
+  _timer: {fileID: 657020552}
   _chickenList:
   - {fileID: 470986964}
   - {fileID: 793084054}

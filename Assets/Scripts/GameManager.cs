@@ -3,18 +3,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public bool IsWin { get; private set; } = false;
-    public bool IsAllowToRoll { get; private set; } = false;
-    public bool IsAllowToJump { get; private set; } = false;
-    public List<Chicken> ChickensList { get; private set; }
-
     [SerializeField] private BallMover _ballMover;
     [SerializeField] private BallJumper _ballJumper;
-    [SerializeField] private MovementDetector _movementDetector;
     [SerializeField] private CollisionDetector _collisionDetector;
+    [SerializeField] private ChickenCollector _chickenCollector;
+
+    [SerializeField] private MovementDetector _movementDetector;
+    
     [SerializeField] private Timer _timer;
 
-    [SerializeField] private ChickenCollector _chickenCollector;
     [SerializeField] private List<Chicken> _chickenList;
 
     [SerializeField] private int _chickenValue;
@@ -24,12 +21,10 @@ public class GameManager : MonoBehaviour
 
     private bool _isStartTimer;
 
-    private bool _isLose;
+    private bool _isUp;
     private bool _isCollected;
-
-    private bool _isOnWall;
-    private bool _isGrounded;
-    private bool _isJumping;
+    public bool IsWin { get; private set; } = false;
+    public List<Chicken> ChickensList { get; private set; }
 
     private void Awake()
     {
@@ -40,41 +35,38 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         _isStartTimer = _movementDetector.IsStartTimer;
-        _isLose = _timer.IsLose;
-
-        _isJumping = _ballJumper.IsJumping;
-        _isOnWall = _collisionDetector.IsOnWall;
-        _isGrounded = _collisionDetector.IsGrounded;
+        _isUp = _timer.IsUp;
 
         _isCollected = _chickenCollector.IsCollected;
 
         if (_isStartTimer)
         {
-            _timer.TimeToCollect();
+            _timer.Tick();
         }
 
-        if (_isLose == false || IsWin == false)
+        if (_isUp == false || IsWin == false)
         {
-            IsAllowToRoll = true;
-            IsAllowToJump = true;
-
-            if (_isJumping)
+            if (_collisionDetector.IsOnWall == false && _collisionDetector.IsGrounded)
             {
-                StopMovement();
+                _ballMover.AllowRolling();
+                _ballJumper.AllowJumping();
             }
-            if (_isOnWall)
+            if (_collisionDetector.IsOnWall && _collisionDetector.IsGrounded == false)
             {
-                IsAllowToJump = false;
+                _ballMover.AllowRolling();
+                _ballJumper.DisableJumping();
             }
-            if (_isGrounded == false && _isOnWall == false)
+            if (_collisionDetector.IsOnWall == false && _collisionDetector.IsGrounded == false)
             {
-                StopMovement();
+                _ballMover.DisableRolling();
+                _ballJumper.DisableJumping();
             }
         }
-        
-        if (_isLose || IsWin)
+
+        if (_isUp || IsWin)
         {
-            StopMovement();
+            _ballMover.DisableRolling();
+            _ballJumper.DisableJumping();
         }
 
         if (_isCollected == true)
@@ -91,11 +83,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    private void StopMovement()
-    {
-        IsAllowToRoll = false;
-        IsAllowToJump = false;
-    }
+
     public void AddChicken(int value) => _currentChickensCount += value;
     public int GetCollectedChickens() => _currentChickensCount;
 }

@@ -25,19 +25,18 @@ public class ConsoleWritter : MonoBehaviour
         {
             _isWin = _gameManager.IsWin;
 
-            if (_timer.IsLose == false && _gameManager.IsWin == false)
+            if (_timer.IsUp == false && _gameManager.IsWin == false)
             {
                 Debug.Log(_chickensCollectedString + _gameManager.GetCollectedChickens() + _chickensCollectedEndString + _gameManager.ChickensList.Count + "\n"
                 + _timerTitleString + _timer.GetCurrentTimerValue() + _timerTitleEndString);
             }
-            if (_isWin || _timer.IsLose)
+            if (_isWin || _timer.IsUp)
             {
-                if (_timer.IsLose)
+                if (_timer.IsUp)
                 {
                     Debug.Log(_loseMessage);
                     _isDone = true;
                 }
-
                 if (_gameManager.IsWin)
                 {
                     Debug.Log(_winMessage);
@@ -45,7 +44,5 @@ public class ConsoleWritter : MonoBehaviour
                 }
             }
         }
-        
-
     }
 }
